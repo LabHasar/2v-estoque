@@ -1,0 +1,11 @@
+.container {
+    padding: 5%;
+}
+
+.center {
+  row-gap: 2%;
+  background-color: #1976D2;
+  border-radius: 6px;
+  overflow: auto;
+  padding: 1% 3%;
+}
