@@ -2,30 +2,26 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../configdb/firebase";
+import sx from "./styles.module.css";
+import Checkbox from '@mui/material/Checkbox';
 
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 
 export default function EquipList() {
-  const [itens, setItens] = useState([]);
+  // const [itens, setItens] = useState([]);
 
-  useEffect(() => {
-    // Função assíncrona para buscar dados no Firestore
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "item"));
-        const dados = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setItens(dados);
-      } catch (error) {
-        console.error("Erro ao buscar dados do Firestore:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(collection(db, "item"), (querySnapshot) => {
+  //     const dados = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     setItens(dados);
+  //   });
 
-    // Chama a função para buscar os dados ao montar o componente
-    fetchData();
-  }, []); // O array vazio como segundo argumento garante que o useEffect só seja executado uma vez, ao montar o componente
+  //   // Função de cleanup ao desmontar o componente
+  //   return () => unsubscribe();
+  // }, []); // O array vazio como segundo argumento garante que o useEffect só seja executado uma vez, ao montar o componente
 
   return (
     <Box>
@@ -39,15 +35,22 @@ export default function EquipList() {
             Equipamentos:
           </h1>
         </div>
-        <div className="text-white font-semibold mb-4">
-          {itens.map((item) => (
-            <div key={item.id}>
-              <p>{item.nome}</p>
 
-              {/* Adicione mais campos conforme necessário */}
+        <div className="text-black font-semibold mb-4 flex flex-col" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          {/* {itens.map((item) => (
+            <div key={item.id} className={sx.list}>
+              <p>{item.nome}</p>
+            </div>
+          ))} */}
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={`fake-item-${index}`} className={sx.list}>
+              <p>Item de Teste {index + 1}</p>
+              <Checkbox/>
             </div>
           ))}
+          
         </div>
+        
       </div>
     </Box>
   );
