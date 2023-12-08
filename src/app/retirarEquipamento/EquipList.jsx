@@ -19,15 +19,15 @@ export default function EquipList() {
       setItens(dados);
     });
 
-    // Função de cleanup ao desmontar o componente
+    
     return () => unsubscribe();
-  }, []); // O array vazio como segundo argumento garante que o useEffect só seja executado uma vez, ao montar o componente
+  }, []); 
 
 
 console.log("itens aqui - ", itens.nome);
   return (
     <Box>
-      {/* Renderiza os itens, você pode criar um componente específico para isso se desejar */}
+      
       <div className="py-5 ">
         <div className="flex flex-col items-center justify-center text-center">
           <h1
