@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Container } from "@mui/material";
 import Header from "../components/header/page";
 import sx from "./styles.module.css";
 import Button from '@mui/material/Button';
 import EquipList from "./equipList";
+
 
 export default function RetirarEquipamentoPage() {
   return (
