@@ -11,7 +11,7 @@ export default function EquipList() {
   const [itens, setItens] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "item"), (querySnapshot) => {
+    const unsubscribe = onSnapshot(collection(db, "Itens"), (querySnapshot) => {
       const dados = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -24,7 +24,7 @@ export default function EquipList() {
   }, []); 
 
 
-console.log("itens aqui - ", itens.nome);
+console.log("itens aqui - ", itens);
   return (
     <Box>
       
@@ -41,7 +41,7 @@ console.log("itens aqui - ", itens.nome);
         <div className="text-black font-semibold mb-4 flex flex-col" style={{ maxHeight: '300px', overflowY: 'auto' }}>
           {itens.map((item) => (
             <div key={item.id} className={sx.list}>
-              <p>{item.nome}</p>
+              <p>{item?.item}</p>
               <Checkbox/>
             </div>
           ))}
