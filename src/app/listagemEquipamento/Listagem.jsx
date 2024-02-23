@@ -52,10 +52,14 @@ export default function Listagem() {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={sx.modalContainer}>
-                    <img src={selectedImage.img} alt="Selected" className={sx.modalImage} />
-                    <Typography variant="h5" className={sx.modalTitle}>
-                        {selectedImage.item}
-                    </Typography>
+                    {selectedImage && selectedImage.img && (
+                        <img src={selectedImage.img} alt="Selected" className={sx.modalImage} />
+                    )}
+                    {selectedImage && (
+                        <Typography variant="h5" className={sx.modalTitle}>
+                            {selectedImage.item}
+                        </Typography>
+                    )}
                     <Typography className={sx.modalText}>
                         Descrição do Equipamento
                     </Typography>
