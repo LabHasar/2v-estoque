@@ -33,3 +33,10 @@
   font-size: 15px;
   font-weight: bold;
 }
+
+.image {
+  max-width: 100%; /* Definindo a largura máxima como 100% do contêiner */
+  max-height: 100%; /* Definindo a altura máxima como 100% do contêiner */
+  height: auto; /* Fazendo a altura se ajustar automaticamente */
+  align-items: center;
+}
