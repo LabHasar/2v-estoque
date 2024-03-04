@@ -1,13 +1,71 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import React from "react";
+import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { useState } from "react";
 
-export default function Header() {
+export default function Header({currentPage}) {
+  
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const list = () => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+      >
+        <List>
+          <ListItem button key="RetirarEquipamento">
+            <Link href="/retirarEquipamento" passHref>
+              <ListItemText primary="Retirar Equipamento" />
+            </Link>
+          </ListItem>
+          <ListItem button key="DevolverEquipamento">
+            <Link href="/devolucaoEquipamento" passHref>
+              <ListItemText primary="Devolver Equipamento" />
+            </Link>
+          </ListItem>
+        </List>
+      </Drawer>
+    </Box>
+  );
+
   return (
     <AppBar position="static">
       <Toolbar disableGutters>
         <Link href="/" passHref>
-          <AiFillHome
+          {currentPage ==="home" ? (
+            <GiHamburgerMenu 
+            style={{
+              fontSize: "30px",
+              marginLeft: "10px",
+              color: "inherit",
+              cursor: "pointer",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onClick={toggleDrawer(true)}
+          />
+
+          ) : (<AiFillHome
             style={{
               fontSize: "30px",
               marginLeft: "10px",
@@ -18,6 +76,7 @@ export default function Header() {
               alignItems: "center",
             }}
           />
+          ) }
         </Link>
 
         <Typography
@@ -41,6 +100,7 @@ export default function Header() {
           CONTROLE DE ESTOQUE
         </Typography>
       </Toolbar>
+      {list()}
     </AppBar>
   );
 }

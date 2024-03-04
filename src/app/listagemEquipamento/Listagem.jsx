@@ -17,6 +17,7 @@ export default function Listagem() {
                 id: doc.id,
                 ...doc.data(),
             }));
+            dados.sort((a, b) => parseInt(a.id) - parseInt(b.id));
             setItens(dados);
         });
         return () => unsubscribe();
@@ -35,7 +36,7 @@ export default function Listagem() {
 
         <div className={sx.principal}>
             <div className={sx.titulo}>
-                <h1>LISTAGEM DE EQUIPAMENTOS</h1>
+                <h1>EQUIPAMENTOS</h1>
             </div>
             <div className={sx.equipamento}>
                 {itens.map((item) => (
