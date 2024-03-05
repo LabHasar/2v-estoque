@@ -1,6 +1,6 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
-import { onSnapshot, collection, doc, updateDoc, query} from 'firebase/firestore';
+import { onSnapshot, collection, doc, updateDoc, query, Timestamp} from 'firebase/firestore';
 import { db } from "../configdb/firebase";
 import sx from "./styles.module.css";
 import Checkbox from '@mui/material/Checkbox';
@@ -8,9 +8,8 @@ import { Box, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
 
 export default function EquipList() {
-
   const [itens, setItens] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [itensSelecionados, setItensSelecionados] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "Itens"), (querySnapshot) => {
@@ -25,34 +24,31 @@ export default function EquipList() {
     return () => unsubscribe();
   }, []);
 
-  const handleCheckboxChange = (itemId) => {
-    setSelectedItems(prevSelectedItems => {
-      if (prevSelectedItems.includes(itemId)) {
-        return prevSelectedItems.filter(id => id !== itemId);
-      } else {
-        return [...prevSelectedItems, itemId];
-      }
-    });
+  // Função para alternar a seleção de um item
+  const toggleItemSelection = (itemId) => {
+    if (itensSelecionados.includes(itemId)) {
+      setItensSelecionados(itensSelecionados.filter(id => id !== itemId));
+    } else {
+      setItensSelecionados([...itensSelecionados, itemId]);
+    }
   };
 
+  // Função para lidar com o clique no botão "Alugar"
   const handleAlugarClick = async () => {
-    await Promise.all(selectedItems.map(async (itemId) => {
-      const itemDocRef = doc(db, 'Itens', itemId);
-      
-      try {
-        const itemDocSnapshot = await getDoc(itemDocRef);
-        
-        if (itemDocSnapshot.exists()) {
-          await updateDoc(itemDocRef, { alugadoPor: false });
-        } else {
-          console.error(`Documento com ID ${itemId} não encontrado.`);
-        }
-      } catch (error) {
-        console.error("Erro ao verificar ou atualizar documento:", error);
-      }
+    // Atualiza o campo alugadoPor para false nos itens selecionados no banco de dados
+    await Promise.all(itensSelecionados.map(async (itemId) => {
+      const itemRef = doc(db, "Itens", String('item-' + itemId));
+      await updateDoc(itemRef, {
+        alugadoPor: false,
+        dataAlugado: Timestamp.now()
+      });
     }));
-    
-    setSelectedItems([]);
+
+    // Atualiza a lista de itens exibidos para remover os itens alugados
+    setItens(itens.filter(item => !itensSelecionados.includes(item.id)));
+
+    // Limpa a lista de itens selecionados após a atualização bem-sucedida no banco de dados
+    setItensSelecionados([]);
   };
 
   return (
@@ -71,14 +67,14 @@ export default function EquipList() {
             <div key={item.id} className={sx.list}>
               <p>{item?.item}</p>
               <Checkbox
-                checked={selectedItems.includes(item.id)}
-                onChange={() => handleCheckboxChange(item.id)}
+                checked={itensSelecionados.includes(item.id)}
+                onChange={() => toggleItemSelection(item.id)}
               />
             </div>
           ))}
         </div>
       </div>
-      <Button variant="outlined" className={sx.button} onClick={handleAlugarClick}>
+      <Button variant="outlined" className={sx.button} onClick={handleAlugarClick} disabled={itensSelecionados.length === 0}>
         Alugar
       </Button>
     </Box>
