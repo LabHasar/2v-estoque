@@ -1,15 +1,15 @@
-"use client"
 import React, { useState, useEffect } from "react";
-import { onSnapshot, collection, doc, updateDoc, query, Timestamp} from 'firebase/firestore';
+import { onSnapshot, collection, doc, updateDoc, query, getDocs, where, Timestamp } from 'firebase/firestore';
 import { db } from "../configdb/firebase";
 import sx from "./styles.module.css";
 import Checkbox from '@mui/material/Checkbox';
-import { Box, Divider } from "@mui/material";
-import Button from "@mui/material/Button";
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 
 export default function EquipList() {
   const [itens, setItens] = useState([]);
   const [itensSelecionados, setItensSelecionados] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [codigoProduto, setCodigoProduto] = useState('');
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "Itens"), (querySnapshot) => {
@@ -24,31 +24,59 @@ export default function EquipList() {
     return () => unsubscribe();
   }, []);
 
-  // Função para alternar a seleção de um item
   const toggleItemSelection = (itemId) => {
-    if (itensSelecionados.includes(itemId)) {
-      setItensSelecionados(itensSelecionados.filter(id => id !== itemId));
-    } else {
-      setItensSelecionados([...itensSelecionados, itemId]);
-    }
+    setItensSelecionados([itemId]);
   };
 
-  // Função para lidar com o clique no botão "Alugar"
-  const handleAlugarClick = async () => {
-    // Atualiza o campo alugadoPor para false nos itens selecionados no banco de dados
-    await Promise.all(itensSelecionados.map(async (itemId) => {
-      const itemRef = doc(db, "Itens", String('item-' + itemId));
-      await updateDoc(itemRef, {
-        alugadoPor: false,
-        dataAlugado: Timestamp.now()
-      });
-    }));
+  const handleAlugarClick = () => {
+    setOpenModal(true);
+  };
 
-    // Atualiza a lista de itens exibidos para remover os itens alugados
-    setItens(itens.filter(item => !itensSelecionados.includes(item.id)));
+  const handleModalClose = () => {
+    setOpenModal(false);
+    setCodigoProduto('');
+  };
+
+  const handleConfirmAluguel = async () => {
+    // Verifica se há itens selecionados
+    if (itensSelecionados.length === 0) {
+      window.alert("Nenhum item selecionado para alugar.");
+      return;
+    }
+
+    // Realiza a consulta para buscar o documento com o código do produto
+    const q = query(collection(db, "Itens"), where("codigo", "==", codigoProduto));
+    const querySnapshot = await getDocs(q);
+
+    // Verifica se há documentos correspondentes ao código do produto
+    if (querySnapshot.empty) {
+      window.alert("Nenhum produto encontrado com o código inserido.");
+      return;
+    }
+
+    // Verifica se o código do produto corresponde ao item selecionado
+    const itemSelecionado = itens.find(item => item.id === itensSelecionados[0]);
+    const produtoCorrespondente = querySnapshot.docs[0].data();
+
+    if (itemSelecionado.codigo !== produtoCorrespondente.codigo) {
+      window.alert("O código do produto não corresponde ao item selecionado.");
+      return;
+    }
+
+    // Atualiza o campo alugadoPor para false no item selecionado no banco de dados
+    const itemRef = doc(db, "Itens", String('item-' + itemSelecionado.id));
+    await updateDoc(itemRef, {
+      alugadoPor: false,
+      dataAlugado: Timestamp.now()
+    });
+
+    // Atualiza a lista de itens exibidos para remover o item alugado
+    setItens(itens.filter(item => item.id !== itemSelecionado.id));
 
     // Limpa a lista de itens selecionados após a atualização bem-sucedida no banco de dados
     setItensSelecionados([]);
+    setCodigoProduto('');
+    setOpenModal(false);
   };
 
   return (
@@ -77,6 +105,25 @@ export default function EquipList() {
       <Button variant="outlined" className={sx.button} onClick={handleAlugarClick} disabled={itensSelecionados.length === 0}>
         Alugar
       </Button>
+      <Dialog open={openModal} onClose={handleModalClose}>
+        <DialogTitle>Confirmar Aluguel</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="codigoProduto"
+            label="Código do Produto"
+            type="text"
+            fullWidth
+            value={codigoProduto}
+            onChange={(e) => setCodigoProduto(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose}>Cancelar</Button>
+          <Button onClick={handleConfirmAluguel} variant="contained" disabled={!codigoProduto}>Confirmar Aluguel</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
