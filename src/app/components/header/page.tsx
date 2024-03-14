@@ -34,12 +34,12 @@ export default function Header({currentPage}) {
         <List>
           <ListItem button key="RetirarEquipamento">
             <Link href="/retirarEquipamento" passHref>
-              <ListItemText primary="Retirar Equipamento" />
+              <ListItemText primary="Aluguel de Equipamentos" />
             </Link>
           </ListItem>
           <ListItem button key="DevolverEquipamento">
             <Link href="/devolucaoEquipamento" passHref>
-              <ListItemText primary="Devolver Equipamento" />
+              <ListItemText primary="Devoluçao de Equipamentos" />
             </Link>
           </ListItem>
         </List>
