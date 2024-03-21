@@ -3,13 +3,14 @@ import { onSnapshot, collection, doc, updateDoc, query, getDocs, where, Timestam
 import { db } from "../configdb/firebase";
 import sx from "./styles.module.css";
 import Checkbox from '@mui/material/Checkbox';
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from "@mui/material";
 
 export default function EquipList() {
   const [itens, setItens] = useState([]);
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [codigoProduto, setCodigoProduto] = useState('');
+  const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "Itens"), (querySnapshot) => {
@@ -37,10 +38,14 @@ export default function EquipList() {
     setCodigoProduto('');
   };
 
+  const showAlert = (message) => {
+    setAlertMessage(message)
+  }
+
   const handleConfirmAluguel = async () => {
     // Verifica se há itens selecionados
     if (itensSelecionados.length === 0) {
-      window.alert("Nenhum item selecionado para alugar.");
+      showAlert("Nenhum item selecionado para alugar");
       return;
     }
 
@@ -50,7 +55,7 @@ export default function EquipList() {
 
     // Verifica se há documentos correspondentes ao código do produto
     if (querySnapshot.empty) {
-      window.alert("Nenhum produto encontrado com o código inserido.");
+      showAlert("Nenhum produto encontrado com o código inserido.");
       return;
     }
 
@@ -59,7 +64,7 @@ export default function EquipList() {
     const produtoCorrespondente = querySnapshot.docs[0].data();
 
     if (itemSelecionado.codigo !== produtoCorrespondente.codigo) {
-      window.alert("O código do produto não corresponde ao item selecionado.");
+      showAlert("O código do produto não corresponde ao item selecionado.");
       return;
     }
 
@@ -124,6 +129,7 @@ export default function EquipList() {
           <Button onClick={handleConfirmAluguel} variant="contained" disabled={!codigoProduto}>Confirmar Aluguel</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={alertMessage !== null} message = { alertMessage} onClose={() => {setAlertMessage(null)}} autoHideDuration={5000}/>
     </Box>
   );
 }
