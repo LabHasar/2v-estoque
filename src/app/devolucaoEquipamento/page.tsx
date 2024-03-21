@@ -3,22 +3,23 @@ import Header from "../components/header/page";
 import React, { useState } from "react";
 import { doc, getDoc, getDocs, updateDoc, onSnapshot, query, where, collection, Timestamp } from 'firebase/firestore';
 import { db } from "../configdb/firebase";
-import { Box, Container, Button, TextField, Typography  } from "@mui/material";
+import { Box, Container, Button, TextField, Typography, Snackbar  } from "@mui/material";
 import sx from "./styles.module.css"
 
 export default function DevolverEquipamentoPage() {
     const [codigo, setCodigo] = useState('');
+    const [alertMessage, setAlertMessage] = useState(null);
 
     const handleConfirmarClick = async () => {
         if (!codigo) {
-            alert("Por favor, insira um código de equipamento.");
+            showAlert("Por favor, insira um código de equipamento.");
             return;
         }
     
         try {
             const querySnapshot = await getDocs(query(collection(db, "Itens"), where("codigo", "==", codigo)));
             if (querySnapshot.empty) {
-                alert(`Equipamento com código ${codigo} não encontrado.`);
+                showAlert(`Equipamento com código ${codigo} não encontrado.`);
                 return;
             }
             const item = querySnapshot.docs[0].data();
@@ -26,16 +27,20 @@ export default function DevolverEquipamentoPage() {
             
             try {
                 await updateDoc(equipamentoDocRef, { alugadoPor: true, dataDevolvido: Timestamp.now() });
-                alert("Equipamento devolvido com sucesso!");
+                showAlert("Equipamento devolvido com sucesso!");
             } catch (error) {
                 console.error("Erro ao atualizar documento:", error);
-                alert("Ocorreu um erro ao tentar devolver o equipamento. Por favor, tente novamente mais tarde.");
+                showAlert("Ocorreu um erro ao tentar devolver o equipamento. Por favor, tente novamente mais tarde.");
             }
         } catch (error) {
             console.error("Erro ao verificar documento:", error);
-            alert("Ocorreu um erro ao tentar devolver o equipamento. Por favor, tente novamente mais tarde.");
+            showAlert("Ocorreu um erro ao tentar devolver o equipamento. Por favor, tente novamente mais tarde.");
         }
     };
+
+    const showAlert = (msg) => {
+        setAlertMessage(msg)
+      }
         
     return (
         <Box>
@@ -59,6 +64,7 @@ export default function DevolverEquipamentoPage() {
                     </Button>
                 </Box>
             </Container>
+            <Snackbar open={alertMessage !== null} message = { alertMessage} onClose={() => {setAlertMessage(null)}} autoHideDuration={5000}/>
         </Box>
     );
 }
