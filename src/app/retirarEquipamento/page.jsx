@@ -1,16 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Container } from "@mui/material";
 import Header from "../components/header/page";
-import Baseboard from "../components/baseboard/page";
 import sx from "./styles.module.css";
 import EquipList from "./equipList";
+import { UseHomeContext } from "../context/IsHomeContext";
 
 
 export default function RetirarEquipamentoPage() {
+
+  const {isHome, setIsHome} = UseHomeContext()
+
+  useEffect(()=>{
+    setIsHome(false)
+  },[])
+
   return (
     <Box>
-      <Header />
+      <Header/>
       <Container maxWidth='lg' className={sx.container}>
         <div className={sx.center}>
           <EquipList />

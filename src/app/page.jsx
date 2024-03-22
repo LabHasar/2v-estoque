@@ -1,15 +1,21 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Card, Container, Drawer, List, ListItem, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
 import Header from "./components/header/page";
 import Listagem from "./listagemEquipamento/Listagem"; 
+import { UseHomeContext } from "./context/IsHomeContext";
 
-export default function choicePage() {
+export default function Home() {
 
+  const {isHome, setIsHome} = UseHomeContext()
+
+   useEffect(()=>{
+    setIsHome(true)
+  },[])
 
   return (
     <Box>
-      <Header currentPage="home" />
+      <Header/>
       <Container>
         <Toolbar />
         <Stack direction="row" spacing={2}>
@@ -21,3 +27,4 @@ export default function choicePage() {
     </Box>
   );
 }
+
