@@ -1,23 +1,53 @@
-import React from "react";
+"use client"
+import React, { useContext, useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useState } from "react";
+import {UseHomeContext} from '../../context/IsHomeContext'
 
-export default function Header({currentPage}) {
-  
+export default function Header() {
+
+  const {isHome, setIsHome} = UseHomeContext(); 
+
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      ((event.key === 'Tab') || (event.key === 'Shift'))
     ) {
       return;
     }
     setDrawerOpen(open);
   };
+
+  const menuIcon = isHome ? (
+    <GiHamburgerMenu
+      style={{
+        fontSize: "30px",
+        marginLeft: "10px",
+        color: "inherit",
+        cursor: "pointer",
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
+      }}
+      onClick={toggleDrawer(true)}
+    />
+  ) : (
+    <AiFillHome
+      style={{
+        fontSize: "30px",
+        marginLeft: "10px",
+        color: "inherit",
+        cursor: "pointer",
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
+      }}
+    />
+  );
 
   const list = () => (
     <Box
@@ -39,7 +69,7 @@ export default function Header({currentPage}) {
           </ListItem>
           <ListItem button key="DevolverEquipamento">
             <Link href="/devolucaoEquipamento" passHref>
-              <ListItemText primary="Devoluçao de Equipamentos" />
+              <ListItemText primary="Devolução de Equipamentos" />
             </Link>
           </ListItem>
         </List>
@@ -51,32 +81,7 @@ export default function Header({currentPage}) {
     <AppBar position="static">
       <Toolbar disableGutters>
         <Link href="/" passHref>
-          {currentPage ==="home" ? (
-            <GiHamburgerMenu 
-            style={{
-              fontSize: "30px",
-              marginLeft: "10px",
-              color: "inherit",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-            onClick={toggleDrawer(true)}
-          />
-
-          ) : (<AiFillHome
-            style={{
-              fontSize: "30px",
-              marginLeft: "10px",
-              color: "inherit",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}
-          />
-          ) }
+          {menuIcon}
         </Link>
 
         <Typography

@@ -4,6 +4,7 @@ import { onSnapshot, collection } from 'firebase/firestore';
 import { db } from "../configdb/firebase";
 import { Modal, Box, Typography } from "@mui/material";
 import sx from "./styles.module.css"
+import Image from "next/image";
 
 export default function Listagem() {
 
@@ -39,10 +40,10 @@ export default function Listagem() {
                 <h1>EQUIPAMENTOS</h1>
             </div>
             <div className={sx.equipamento}>
-                {itens.map((item) => (
+                {itens.map((item, index) => (
                     <div className={sx.item} key={item.id} onClick={() => handleItemClick(item)}>
                         <text className={sx.nomeequipamento}>{item?.item}</text>
-                        <img src={item.img} className={sx.image} />
+                        <img alt={'item'+index} src={item.img} className={sx.image} />
                     </div>
                 ))}
             </div>
