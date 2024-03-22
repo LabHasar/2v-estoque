@@ -107,7 +107,7 @@ export default function EquipList() {
           ))}
         </div>
       </div>
-      <Button variant="outlined" className={sx.button} onClick={handleAlugarClick} disabled={itensSelecionados.length === 0}>
+      <Button variant="contained" className={sx.button} onClick={handleAlugarClick} disabled={itensSelecionados.length === 0}>
         Alugar
       </Button>
       <Dialog open={openModal} onClose={handleModalClose}>
@@ -126,7 +126,7 @@ export default function EquipList() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleModalClose}>Cancelar</Button>
-          <Button onClick={handleConfirmAluguel} variant="contained" disabled={!codigoProduto}>Confirmar Aluguel</Button>
+          <Button  onClick={handleConfirmAluguel} disabled={!codigoProduto}>Confirmar Aluguel</Button>
         </DialogActions>
       </Dialog>
       <Snackbar open={alertMessage !== null} message = { alertMessage} onClose={() => {setAlertMessage(null)}} autoHideDuration={5000}/>
