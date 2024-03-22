@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { onSnapshot, collection, doc, updateDoc, query, getDocs, where, Timestamp } from 'firebase/firestore';
-import { db } from "../configdb/firebase";
+import { db } from "../../configdb/firebase";
 import sx from "./styles.module.css";
 import Checkbox from '@mui/material/Checkbox';
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from "@mui/material";

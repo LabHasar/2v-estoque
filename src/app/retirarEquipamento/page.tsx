@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Box, Container } from "@mui/material";
 import Header from "../components/header/page";
 import sx from "./styles.module.css";
-import EquipList from "./equipList";
+import EquipList from "./equipList/EquipList";
 import { UseHomeContext } from "../context/IsHomeContext";
 
 
