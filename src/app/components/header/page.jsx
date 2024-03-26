@@ -78,6 +78,11 @@ export default function Header() {
               <ListItemText primary="Devolução de Equipamentos" />
             </Link>
           </ListItem>
+          <ListItem button key="CadastroEquipamento">
+            <Link href="/cadastroEquipamento" passHref>
+              <ListItemText primary="Cadastro de Equipamentos" />
+            </Link>
+          </ListItem>
         </List>
       </Drawer>
     </Box>
