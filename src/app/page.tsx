@@ -7,7 +7,7 @@ import { UseHomeContext } from "./context/IsHomeContext";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "./context/AuthContext";
 
-export default function choicePage() {
+export default function ChoicePage() {
 
   const {isHome, setIsHome} = UseHomeContext();
   const { user, setUser } = useAuthContext();
