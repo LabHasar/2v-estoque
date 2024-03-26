@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import IsHomeProvider from './context/IsHomeContext'
+import AuthProvider from './context/AuthContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Controle de Estoque',
-  
+
 }
 
 export default function RootLayout({
@@ -16,10 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <IsHomeProvider>
-      <body className={inter.className}>{children}</body>
+      <AuthProvider>
 
-      </IsHomeProvider>
+        <IsHomeProvider>
+          <body className={inter.className}>{children}</body>
+
+        </IsHomeProvider>
+      </AuthProvider>
     </html>
   )
 }

@@ -4,11 +4,17 @@ import { AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText 
 import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
-import {UseHomeContext} from '../../context/IsHomeContext'
+import { UseHomeContext } from '../../context/IsHomeContext'
+import { useAuthContext } from "@/app/context/AuthContext";
+import { RiAccountCircleFill } from "react-icons/ri";
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
 
-  const {isHome, setIsHome} = UseHomeContext(); 
+  const { isHome, setIsHome } = UseHomeContext();
+  const { user } = useAuthContext();
+  const router = useRouter();
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -104,6 +110,30 @@ export default function Header() {
         >
           CONTROLE DE ESTOQUE
         </Typography>
+
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto', marginRight: '20px' }}>
+            <Typography variant="body1" sx={{ marginRight: '10px' }}>{user?.email.split('@')[0]}</Typography>
+            <RiAccountCircleFill style={{ marginRight: '10px' }} />
+          </Box>
+
+          <Box sx={{ marginTop: 'auto', marginRight: '20px' }}>
+            <button
+              type="button"
+              onClick={() => router.push("/signIn")}
+              style={{
+                backgroundColor: 'white',
+                color: 'blue',
+                width: '100%',
+                borderRadius: '5px', 
+                fontSize: '14px'
+              }}
+            >
+              Sair
+            </button>
+          </Box>
+        </Box>
+
       </Toolbar>
       {list()}
     </AppBar>

@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/retirarEquipamento/page.tsx", "src/app/page.jsx", "src/app/components/header/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/retirarEquipamento/page.tsx", "src/app/page.tsx", "src/app/components/header/page.jsx", "src/app/context/AuthContext.ts"],
   "exclude": ["node_modules"]
 }

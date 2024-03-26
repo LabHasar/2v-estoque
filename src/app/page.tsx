@@ -4,16 +4,26 @@ import { Box, Card, Container, Drawer, List, ListItem, ListItemText, Stack, Tool
 import Header from "./components/header/page";
 import Listagem from "./listagemEquipamento/Listagem"; 
 import { UseHomeContext } from "./context/IsHomeContext";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "./context/AuthContext";
 
-export default function Home() {
+export default function ChoicePage() {
 
-  const {isHome, setIsHome} = UseHomeContext()
+  const {isHome, setIsHome} = UseHomeContext();
+  const { user, setUser } = useAuthContext();
+  const router = useRouter();
 
-   useEffect(()=>{
-    setIsHome(true)
-  },[])
+  useEffect(() => {
+    setIsHome(true);
+
+    if (typeof window !== 'undefined' && user === null) {
+      router.push("/signIn");
+    }
+  }, [user]);
 
   return (
+    <>
+    {user?.email && (
     <Box>
       <Header/>
       <Container>
@@ -25,6 +35,9 @@ export default function Home() {
         </Stack>
       </Container>
     </Box>
+    )}
+    </>
   );
 }
+
 
