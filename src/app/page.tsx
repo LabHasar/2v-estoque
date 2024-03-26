@@ -7,7 +7,7 @@ import { UseHomeContext } from "./context/IsHomeContext";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "./context/AuthContext";
 
-export function Home() {
+export default function choicePage() {
 
   const {isHome, setIsHome} = UseHomeContext();
   const { user, setUser } = useAuthContext();
@@ -40,5 +40,4 @@ export function Home() {
   );
 }
 
-export default Home;
 
