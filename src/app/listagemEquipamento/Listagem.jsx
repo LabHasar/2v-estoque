@@ -43,7 +43,7 @@ export default function Listagem() {
                 {itens.map((item, index) => (
                     <div className={sx.item} key={item.id} onClick={() => handleItemClick(item)}>
                         <text className={sx.nomeequipamento}>{item?.item}</text>
-                        <img alt={'item'+index} src={item.img} className={sx.image} />
+                        <img alt={'item' + index} src={item.img} className={sx.image} />
                     </div>
                 ))}
             </div>
@@ -54,17 +54,39 @@ export default function Listagem() {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={sx.modalContainer}>
-                    {selectedImage && selectedImage.img && (
-                        <img src={selectedImage.img} alt="Selected" className={sx.modalImage} />
-                    )}
-                    {selectedImage && (
-                        <Typography variant="h5" className={sx.modalTitle}>
-                            {selectedImage.item}
-                        </Typography>
-                    )}
-                    <Typography className={sx.modalText}>
-                        Descrição do Equipamento
-                    </Typography>
+                    <Box className={sx.modalEsquerda}>
+                        {selectedImage && selectedImage.img && (
+                            <img src={selectedImage.img} alt="Selected" className={sx.modalImage} />
+                        )}
+                        {selectedImage && selectedImage.video && (
+                            <iframe
+                                title="Video"
+                                width="auto"
+                                height="50%"
+                                src={selectedImage.video}
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        )}
+                    </Box>
+                    <Box className={sx.modalDireita}>
+                        {selectedImage && (
+                            <Typography variant="h5" className={sx.modalTitle}>
+                                {selectedImage.item}
+                            </Typography>
+                        )}
+                        {selectedImage && (
+                            <Typography className={sx.modalText}>
+                                {selectedImage.descricao}
+                            </Typography>
+                        )}
+                        {selectedImage && selectedImage.datasheet && (
+                            <Typography className={sx.modalDatasheet}>
+                                <a href={selectedImage.datasheet} download>Especificações</a>
+                            </Typography>
+                        )}
+                    </Box>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     </Typography>
                 </Box>

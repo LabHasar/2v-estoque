@@ -12,6 +12,9 @@ export default function CadastroEquipamento() {
     const [item, setItem] = useState('');
     const [codigo, setCodigo] = useState('');
     const [img, setImg] = useState('');
+    const [video, setVideo] = useState('');
+    const [descricao, setDescricao] = useState('');
+    const [datasheet, setDatasheet] = useState('');
 
     const { isHome, setIsHome } = UseHomeContext()
 
@@ -44,9 +47,13 @@ export default function CadastroEquipamento() {
                 codigo: codigo,
                 dataAlugado: null,
                 dataDevolvido: null,
+                datasheet: datasheet,
+                descricao: descricao,
                 id: nextId,
                 img: img,
                 item: item,
+                video: video,
+
             });
 
             console.log('Equipamento cadastrado com ID: ', docRef.id);
@@ -54,6 +61,9 @@ export default function CadastroEquipamento() {
             setItem('');
             setCodigo('');
             setImg('');
+            setDescricao('');
+            setVideo('');
+            setDatasheet('');
 
         } catch (error) {
             console.error('Erro ao cadastrar equipamento: ', error);
@@ -83,6 +93,21 @@ export default function CadastroEquipamento() {
                             <label className={sx.input}>
                                 URL da Imagem:
                                 <input type="text" value={img} onChange={(e) => setImg(e.target.value)} />
+                            </label>
+                            <br />
+                            <label className={sx.input}>
+                                URL do Video:
+                                <input type="text" value={video} onChange={(e) => setVideo(e.target.value)} />
+                            </label>
+                            <br />
+                            <label className={sx.input}>
+                                Descrição do Equipamento:
+                                <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+                            </label>
+                            <br />
+                            <label className={sx.input}>
+                                Datasheet:
+                                <input type="text" value={datasheet} onChange={(e) => setDatasheet(e.target.value)} />
                             </label>
                             <br />
                             <Box textAlign="center">
